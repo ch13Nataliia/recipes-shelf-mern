@@ -4,12 +4,12 @@ import {
   Container,
   Flex,
   HStack,
-  Link,
+
   Text,
   useColorMode,
 } from '@chakra-ui/react';
 import { FaPlusCircle } from 'react-icons/fa';
-
+import { Link } from 'react-router-dom';
 import { FiSun } from 'react-icons/fi';
 import { FaMoon } from 'react-icons/fa';
 

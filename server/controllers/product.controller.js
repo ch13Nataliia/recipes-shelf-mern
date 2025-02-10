@@ -24,7 +24,7 @@ export const getSingleProduct = async (req, res) => {
 };
 
 // CREATE PRODUCT
-export const createProduct =  async (req, res) => {
+export const createProduct = async (req, res) => {
   const product = req.body;
   if (
     !product.name ||
@@ -44,22 +44,29 @@ export const createProduct =  async (req, res) => {
     console.error('Error in Create Product', error.message);
     res.status(500).json({ success: false, message: 'Server Error' });
   }
-}
+};
 
 // UPDATE PRODUCT
 export const updateProduct = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const product = await Product.findByIdAndUpdate(id, req.body);
-    if (!product) {
-      return res.status(404).json({ message: 'product not found' });
-    }
-    const updateProduct = await Product.findById(id);
-    res.status(200).json(updateProduct);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+  const { id } = req.params;
+
+  const product = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res
+      .status(404)
+      .json({ success: false, message: 'Invalid Product Id' });
   }
-}
+
+  try {
+    const updatedProduct = await Product.findByIdAndUpdate(id, product, {
+      new: true,
+    });
+    res.status(200).json({ success: true, data: updatedProduct });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server Error' });
+  }
+};
 
 // DELETE PRODUCT
 export const deleteProduct = async (req, res) => {
@@ -74,4 +81,4 @@ export const deleteProduct = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}
+};
